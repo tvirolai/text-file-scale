@@ -1,29 +1,16 @@
 /* jshint node: true */
-
 "use strict";
-
-const readline = require('readline');
-const fs = require('fs');
-
-const rl = readline.createInterface({
-  input: fs.createReadStream('test.txt')
-});
-
-const tokenize = (line) => line.split(/[\s,\.:!\?]+/).filter(element => element.length > 0);
-
-const wordFilter = {
-  words: {},
-  process(word) {
-    if (!(word in this.words)) {
-      this.words[word] = 1;
-    } else {
-      this.words[word]++;
-    }
-    return word;
-  }
+exports.__esModule = true;
+var node_line_reader_1 = require("node-line-reader");
+var tokenize = function (line) { return line.split(/[\s,\.:!\?]+/).filter(function (element) { return element.length > 0; }); };
+function readWords(reader, lista) {
+    reader.nextLine(function (err, line) {
+        if (line === null) {
+            return "moro";
+        }
+        else {
+            readWords(reader, tokenize(line));
+        }
+    });
 }
-
-rl.on('line', line => {
-  let data = tokenize(line);
-  data.forEach( word => console.log(wordFilter.process(word)))
-});
+console.log(readWords(new node_line_reader_1.LineReader("testi.txt"), []));
